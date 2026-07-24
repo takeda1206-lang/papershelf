@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Papershelf 説明書</title>
+<meta name="theme-color" content="#FAF8F4">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>
+  :root {
+    --paper: #FAF8F4;
+    --paper-warm: #F5F1E8;
+    --card: #FFFFFE;
+    --ink: #2B2A26;
+    --ink-soft: #6E6A5E;
+    --ink-faint: #9B968A;
+    --line: #E5DFD3;
+    --line-soft: #EFEAE0;
+    --green: #3D5A45;
+    --green-deep: #2F4737;
+    --green-wash: #EBF0EC;
+    --brass: #A98A50;
+    --brass-soft: #CBB98A;
+    --danger: #A65D57;
+    --st-yellow: #F5E6A8;
+    --font-display: "Iowan Old Style", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", Georgia, serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    line-height: 1.9;
+    padding: 0 22px calc(70px + env(safe-area-inset-bottom));
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+
+  .masthead {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: calc(30px + env(safe-area-inset-top)) 0 16px;
+  }
+  .seal {
+    width: 38px; height: 38px;
+    background: var(--green);
+    color: var(--paper);
+    font-family: var(--font-display);
+    font-size: 21px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    transform: rotate(-2deg);
+    flex: none;
+  }
+  .masthead h1 { font-family: var(--font-display); font-size: 27px; font-weight: 500; line-height: 1.2; }
+  .masthead .sub { font-size: 10.5px; letter-spacing: 0.16em; color: var(--brass); font-weight: 600; }
+  .rule { height: 4px; border-top: 1px solid var(--brass); border-bottom: 1px solid var(--line); }
+
+  .backlink { margin-top: 14px; font-size: 13px; }
+  .backlink a { color: var(--green); font-weight: 600; text-decoration: none; }
+  .backlink a:hover { text-decoration: underline; }
+
+  .lede { margin-top: 22px; color: var(--ink-soft); font-size: 14px; }
+
+  nav.toc {
+    margin-top: 26px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 16px 20px;
+  }
+  nav.toc .label { font-size: 10.5px; letter-spacing: 0.14em; color: var(--brass); font-weight: 600; }
+  nav.toc ol { margin: 8px 0 0 1.4em; display: grid; gap: 3px; font-size: 13.5px; }
+  nav.toc a { color: var(--green); text-decoration: none; }
+  nav.toc a:hover { text-decoration: underline; }
+
+  section { margin-top: 54px; }
+  h2 {
+    font-family: var(--font-display);
+    font-size: 21px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+    text-wrap: balance;
+  }
+  h2 .no {
+    display: inline-block;
+    min-width: 30px;
+    color: var(--brass);
+    font-size: 16px;
+  }
+  h3 { font-size: 15.5px; margin-top: 26px; color: var(--green-deep); }
+  p { margin-top: 12px; }
+  section > p:first-of-type { margin-top: 16px; }
+
+  .chip {
+    display: inline-block;
+    background: var(--paper-warm);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 0 7px;
+    font-size: 0.92em;
+    white-space: nowrap;
+  }
+  code, .mono {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.9em;
+    background: var(--paper-warm);
+    border: 1px solid var(--line-soft);
+    border-radius: 3px;
+    padding: 1px 6px;
+    word-break: break-all;
+  }
+  a { color: var(--green); }
+
+  .url-card {
+    margin-top: 16px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--green);
+    border-radius: 4px;
+    padding: 14px 18px;
+    font-size: 14px;
+  }
+  .url-card b { font-family: var(--font-display); font-weight: 500; }
+  .url-card .u { font-family: "SF Mono", Menlo, monospace; font-size: 13px; word-break: break-all; }
+
+  ol.steps { margin: 16px 0 0 0; list-style: none; counter-reset: st; display: grid; gap: 14px; }
+  ol.steps > li {
+    counter-increment: st;
+    position: relative;
+    padding: 14px 18px 14px 54px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+  }
+  ol.steps > li::before {
+    content: counter(st);
+    position: absolute;
+    left: 16px; top: 15px;
+    width: 24px; height: 24px;
+    background: var(--green);
+    color: var(--paper);
+    border-radius: 50%;
+    font-size: 12.5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+  }
+  ol.steps > li b.t { display: block; margin-bottom: 2px; }
+  ol.steps ul { margin: 6px 0 0 1.2em; }
+
+  .note, .warn {
+    margin-top: 14px;
+    border-radius: 4px;
+    padding: 12px 16px;
+    font-size: 13.5px;
+  }
+  .note { background: var(--green-wash); border: 1px solid #D6E2D8; }
+  .note .tag { color: var(--green-deep); font-weight: 700; margin-right: 6px; }
+  .warn { background: #F9F0E4; border: 1px solid #EAD9BC; }
+  .warn .tag { color: #8A6A2F; font-weight: 700; margin-right: 6px; }
+
+  .sticky-demo {
+    display: inline-block;
+    width: 15px; height: 15px;
+    background: var(--st-yellow);
+    border: 1px solid rgba(43,42,38,0.12);
+    border-radius: 2px;
+    transform: rotate(-3deg);
+    vertical-align: -2px;
+    margin: 0 2px;
+  }
+
+  figure.diagram {
+    margin-top: 20px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 18px 14px 8px;
+    overflow-x: auto;
+  }
+  figure.diagram svg { display: block; min-width: 560px; width: 100%; height: auto; }
+  figcaption { font-size: 12px; color: var(--ink-faint); text-align: center; padding: 8px 0 6px; }
+
+  table.plain {
+    margin-top: 14px;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    background: var(--card);
+  }
+  table.plain th, table.plain td {
+    border: 1px solid var(--line);
+    padding: 9px 13px;
+    text-align: left;
+    vertical-align: top;
+  }
+  table.plain th { background: var(--paper-warm); font-weight: 600; white-space: nowrap; }
+
+  details.qa {
+    margin-top: 12px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+  }
+  details.qa summary {
+    cursor: pointer;
+    padding: 13px 18px;
+    font-weight: 600;
+    font-size: 14px;
+    list-style: none;
+    position: relative;
+    padding-right: 40px;
+  }
+  details.qa summary::-webkit-details-marker { display: none; }
+  details.qa summary::before { content: "Q."; color: var(--brass); font-family: var(--font-display); margin-right: 8px; }
+  details.qa summary::after {
+    content: "+";
+    position: absolute;
+    right: 16px; top: 50%;
+    transform: translateY(-52%);
+    color: var(--ink-faint);
+    font-size: 18px;
+    font-weight: 400;
+  }
+  details.qa[open] summary::after { content: "−"; }
+  details.qa .a {
+    padding: 2px 18px 15px;
+    border-top: 1px dashed var(--line-soft);
+    font-size: 13.5px;
+    color: var(--ink-soft);
+  }
+  details.qa .a p { margin-top: 10px; }
+
+  footer.end {
+    margin-top: 70px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+  footer.end a { color: var(--green); font-weight: 600; text-decoration: none; }
+  @media (max-width: 560px) {
+    body { font-size: 14px; }
+    .masthead h1 { font-size: 23px; }
+    h2 { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <span class="seal">架</span>
+    <div>
+      <h1>Papershelf 説明書</h1>
+      <div class="sub">PRIVATE STUDY SHELF — MANUAL</div>
+    </div>
+  </header>
+  <div class="rule"></div>
+  <p class="backlink"><a href="./">← アプリを開く（書架へ）</a></p>
+
+  <p class="lede">
+    Papershelf は、勉強用のHTMLファイルを一か所に収蔵して iPhone と Mac の両方から読み、
+    付箋<span class="sticky-demo"></span>とメモを貼っておける、あなた専用の書架です。
+    この説明書は、新しい端末を追加するときの手順（GitHubトークンの作り方）と、
+    日々の使い方・よくある質問をまとめたものです。
+  </p>
+
+  <nav class="toc">
+    <span class="label">目次</span>
+    <ol>
+      <li><a href="#about">仕組み — どこに何が保存されるか</a></li>
+      <li><a href="#setup">新しい端末を追加する（トークンの作り方）</a></li>
+      <li><a href="#usage">毎日の使い方</a></li>
+      <li><a href="#faq">よくある質問</a></li>
+      <li><a href="#dev">開発・引継ぎ情報（上級）</a></li>
+    </ol>
+  </nav>
+
+  <!-- ============================================================ -->
+  <section id="about">
+    <h2><span class="no">一</span>仕組み — どこに何が保存されるか</h2>
+    <p>
+      アプリ本体は「器」だけで、あなたのファイルは入っていません。
+      蔵書（HTMLファイル）と付箋はすべて、あなたの GitHub アカウントの
+      <b>非公開リポジトリ</b>に保存されます。どの端末から見ても同じ一つのデータを
+      読み書きするので、常に同じ書架が見えます。
+    </p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 640 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="構成図">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="#6E6A5E"/>
+          </marker>
+        </defs>
+        <!-- 端末 -->
+        <rect x="14" y="38" width="130" height="52" rx="5" fill="#FFFFFE" stroke="#E5DFD3"/>
+        <text x="79" y="60" text-anchor="middle" font-size="13" fill="#2B2A26" font-weight="bold">Mac</text>
+        <text x="79" y="78" text-anchor="middle" font-size="10.5" fill="#6E6A5E">閲覧・収蔵・削除・付箋</text>
+        <rect x="14" y="104" width="130" height="52" rx="5" fill="#FFFFFE" stroke="#E5DFD3"/>
+        <text x="79" y="126" text-anchor="middle" font-size="13" fill="#2B2A26" font-weight="bold">iPhone</text>
+        <text x="79" y="144" text-anchor="middle" font-size="10.5" fill="#6E6A5E">閲覧・削除・付箋</text>
+        <!-- アプリ -->
+        <rect x="234" y="64" width="160" height="66" rx="5" fill="#FAF8F4" stroke="#A98A50"/>
+        <text x="314" y="88" text-anchor="middle" font-size="13" fill="#2B2A26" font-weight="bold">アプリ（公開の器）</text>
+        <text x="314" y="106" text-anchor="middle" font-size="10" fill="#6E6A5E">github.io/papershelf</text>
+        <text x="314" y="120" text-anchor="middle" font-size="10" fill="#6E6A5E">データは含まない</text>
+        <!-- データ -->
+        <rect x="474" y="52" width="152" height="90" rx="5" fill="#EBF0EC" stroke="#3D5A45"/>
+        <text x="550" y="76" text-anchor="middle" font-size="13" fill="#2F4737" font-weight="bold">データ（非公開）</text>
+        <text x="550" y="94" text-anchor="middle" font-size="10.5" fill="#3D5A45">papershelf-data</text>
+        <text x="550" y="112" text-anchor="middle" font-size="10" fill="#6E6A5E">docs/ … 蔵書HTML</text>
+        <text x="550" y="127" text-anchor="middle" font-size="10" fill="#6E6A5E">shelf.json … 付箋</text>
+        <!-- 矢印 -->
+        <line x1="146" y1="64" x2="230" y2="88" stroke="#6E6A5E" stroke-width="1.3" marker-end="url(#arr)"/>
+        <line x1="146" y1="130" x2="230" y2="106" stroke="#6E6A5E" stroke-width="1.3" marker-end="url(#arr)"/>
+        <line x1="396" y1="97" x2="470" y2="97" stroke="#6E6A5E" stroke-width="1.3" marker-end="url(#arr)" marker-start="url(#arr)"/>
+        <text x="433" y="88" text-anchor="middle" font-size="10" fill="#6E6A5E">トークンで</text>
+        <text x="433" y="115" text-anchor="middle" font-size="10" fill="#6E6A5E">読み書き</text>
+      </svg>
+      <figcaption>蔵書と付箋は非公開リポジトリだけに置かれ、トークンを設定した端末しか読めない</figcaption>
+    </figure>
+
+    <div class="url-card">
+      <b>アプリのURL（全端末共通・ブックマーク推奨）</b><br>
+      <span class="u">https://takeda1206-lang.github.io/papershelf/</span>
+    </div>
+
+    <div class="note"><span class="tag">安心</span>
+      付箋はアプリの管理ファイル（shelf.json）にだけ記録されます。
+      収蔵したHTMLファイル自体は<b>1文字も変更されません</b>。
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="setup">
+    <h2><span class="no">二</span>新しい端末を追加する（トークンの作り方）</h2>
+    <p>
+      新しい端末（買い替えたMac・iPhone、職場のPCなど）でも、アプリのURLを開いて
+      「鍵」＝アクセストークンを一度設定すれば、同じ書架がそのまま見えます。
+      トークンは<b>端末ごとに新しく作るのがおすすめ</b>です
+      （以前のトークンは一度しか表示されないため、再利用より新規作成が簡単。
+      古い端末はそのまま使い続けられます）。
+    </p>
+
+    <ol class="steps">
+      <li>
+        <b class="t">GitHub のトークン作成ページを開く</b>
+        <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>
+        を開き、<span class="chip">takeda1206-lang</span> でログインする。
+      </li>
+      <li>
+        <b class="t">名前と有効期限</b>
+        <ul>
+          <li>Token name: <span class="chip">Papershelf-iPhone</span> のように端末名を入れると後で区別しやすい</li>
+          <li>Resource owner: <span class="chip">takeda1206-lang</span> のまま</li>
+          <li>Expiration: <span class="chip">Custom</span> で最長（約1年後）を選ぶ</li>
+        </ul>
+      </li>
+      <li>
+        <b class="t">Repository access — 対象を1つに絞る</b>
+        <span class="chip">Only select repositories</span> を選び、
+        <span class="chip">Select repositories</span> から
+        <b>papershelf-data</b> だけを選択する。
+      </li>
+      <li>
+        <b class="t">Permissions — ここが一番つまずきやすい</b>
+        <ul>
+          <li><span class="chip">Add permissions</span> を押すと権限の一覧が出る</li>
+          <li>検索欄に <span class="chip">Contents</span> と入力（一覧はアルファベット順で、そのままだと上の方に隠れている）</li>
+          <li><b>Contents</b> にチェックを入れる</li>
+          <li>表に追加された Contents の行で、アクセスレベルを
+            <span class="chip">Read-only</span> から <b><span class="chip">Read and write</span> に変更</b>（初期値のままだと保存できないので注意）</li>
+          <li><b>Metadata</b> が自動で Read-only として付くが、これは必須項目なのでそのままでよい</li>
+          <li>Pages・Pull requests・Secret scanning など<b>他の項目は一切チェック不要</b></li>
+        </ul>
+      </li>
+      <li>
+        <b class="t">生成してコピー</b>
+        <span class="chip">Generate token</span> を押し、表示された
+        <code>github_pat_…</code> をコピーする。
+        <b>この画面を閉じると二度と表示されない</b>ので、その場でコピーすること。
+      </li>
+      <li>
+        <b class="t">アプリに貼り付ける</b>
+        新しい端末で <a href="./">アプリ</a> を開き、トークン欄に貼って
+        <span class="chip">接続する</span>。ユーザー名とリポジトリ名は入力済みのはず
+        （空なら ユーザー名 <span class="chip">takeda1206-lang</span>・リポジトリ
+        <span class="chip">papershelf-data</span>）。
+      </li>
+    </ol>
+
+    <div class="warn"><span class="tag">注意</span>
+      トークンは合鍵と同じです。人に見せたり、メール等に残したままにしないでください。
+      端末をなくした場合などは
+      <a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener">トークン一覧ページ</a>
+      から該当のものだけ削除（Revoke）すれば、その端末からは読めなくなります。
+    </div>
+
+    <h3>iPhone をアプリらしく使う</h3>
+    <p>
+      Safari でアプリを開き、共有ボタン →「<b>ホーム画面に追加</b>」を選ぶと、
+      深緑の本棚アイコンが並び、全画面のアプリとして起動できるようになります。
+    </p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="usage">
+    <h2><span class="no">三</span>毎日の使い方</h2>
+
+    <table class="plain">
+      <tr>
+        <th>収蔵する<br>（Macのみ）</th>
+        <td>書架画面の点線の枠に、勉強用HTMLファイルを<b>ドラッグ＆ドロップ</b>
+          （複数まとめて可）。枠をクリックしてファイル選択でもよい。
+          同名ファイルは上書き確認が出て、付箋は引き継がれる。
+          iPhone ではこの枠は表示されない（閲覧・削除・付箋のみ）。</td>
+      </tr>
+      <tr>
+        <th>読む</th>
+        <td>カードをタップすると本文が開く。文中のリンクは新しいタブで開くので、
+          書架の画面は失われない。</td>
+      </tr>
+      <tr>
+        <th>付箋を貼る</th>
+        <td>右上の付箋ボタン（<span class="sticky-demo"></span>のアイコン）を押してから、
+          本文の好きな場所をタップ。色（黄・青磁・桜・空）を選び、メモを書いて
+          <b>完了</b>。メモは空でもよい。</td>
+      </tr>
+      <tr>
+        <th>付箋を見る・編集</th>
+        <td>本文上の付箋をタップすると編集。右上の一覧ボタンで付箋一覧を開き、
+          タップすると該当箇所へジャンプする。<b>はがす</b>で削除。</td>
+      </tr>
+      <tr>
+        <th>削除する</th>
+        <td>書架カードのゴミ箱、または閲覧中の右上のゴミ箱から。確認画面が出る。
+          Mac・iPhone どちらからでも削除できる。</td>
+      </tr>
+      <tr>
+        <th>探す</th>
+        <td>書架上部の「書架を検索」でタイトルを絞り込み。並びは収蔵日の新しい順。</td>
+      </tr>
+      <tr>
+        <th>同期</th>
+        <td>別の端末で貼った付箋や収蔵は、アプリの画面に戻ってきたときに自動で反映される。
+          反映されないときは再読み込みすればよい。</td>
+      </tr>
+    </table>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="faq">
+    <h2><span class="no">四</span>よくある質問</h2>
+
+    <details class="qa">
+      <summary>「トークンが無効です」「読み込みに失敗」と出るようになった</summary>
+      <div class="a">
+        <p>トークンの有効期限切れが最も多い原因です（作成から約1年）。
+        <a href="#setup">第二章</a>の手順で新しいトークンを作り、
+        書架右上の歯車（接続設定）から貼り直せば、データはそのまま全部戻ります。</p>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary>Permissions で何を選べばいいか分からない</summary>
+      <div class="a">
+        <p>必要なのは <b>Contents = Read and write</b> の1つだけです。
+        Add permissions の検索欄に「Contents」と入力してチェックし、
+        追加された行のアクセスレベルを Read-only から <b>Read and write</b> に
+        変更してください。Metadata（Read-only）は自動で付く必須項目なのでそのまま。
+        他には何もチェックしません。</p>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary>間違って蔵書を削除してしまった。戻せる？</summary>
+      <div class="a">
+        <p>アプリの画面からは戻せませんが、データは GitHub 上で履歴管理されているため、
+        実は過去の版がすべて残っています。papershelf-data リポジトリの履歴
+        （Commits）から削除前のファイルを開いて取り出せます。
+        難しければ、Mac の Claude Code に「Papershelf で消した◯◯を履歴から復元して」と
+        頼めば復元できます。</p>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary>付箋の位置が Mac と iPhone で少しずれる</summary>
+      <div class="a">
+        <p>付箋は「どの要素のどのあたりか」を基準に貼られるため、画面幅が変わって
+        文章が折り返されても概ね同じ内容の場所に付きます。ただし行単位の厳密な
+        位置までは保証されません。ピンポイントで残したい内容はメモ欄に書いておくのが確実です。</p>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary>どんなHTMLファイルでも収蔵できる？容量の目安は？</summary>
+      <div class="a">
+        <p>翻訳HTML・要約HTMLのような単一ファイル（画像埋め込み含む）はそのまま収蔵できます。
+        1冊あたり数MB程度までが快適です。冊数は数百冊規模まで実用上問題ありません。</p>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary>他人に見られない？</summary>
+      <div class="a">
+        <p>蔵書と付箋が入る papershelf-data は非公開リポジトリで、あなたのトークンを
+        設定した端末からしか読めません。アプリのURL自体は誰でも開けますが、
+        見えるのは空の接続画面だけで、データには一切アクセスできません。
+        トークンは各端末のブラウザ内にのみ保存され、外部には送られません
+        （通信先は GitHub のみ）。</p>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary>ブラウザの履歴・キャッシュを消したらどうなる？</summary>
+      <div class="a">
+        <p>その端末の「サイトデータ」まで消すとトークン設定が消え、接続画面に戻ります。
+        蔵書と付箋は GitHub 側にあるので無事です。新しいトークンを作って
+        貼り直せば元通りになります。</p>
+      </div>
+    </details>
+
+    <details class="qa">
+      <summary>お試し用の画面はある？</summary>
+      <div class="a">
+        <p>URLの末尾に <code>?demo=1</code> を付けて開くとデモモードになります。
+        ダミーの蔵書で操作を試せて、何をしても保存されません。</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="dev">
+    <h2><span class="no">五</span>開発・引継ぎ情報（上級）</h2>
+    <p>
+      アプリの改修（デザイン変更・機能追加）に関する技術情報は、Mac の Dropbox 内
+      <span class="chip">Dropbox/ClaudeCode/Papershelf/</span> フォルダにあります。
+    </p>
+    <table class="plain">
+      <tr><th>引継書.md</th><td>別のMacで開発を引き継ぐための手順書（必要ツール・更新方法・復元方法）</td></tr>
+      <tr><th>CLAUDE.md</th><td>Claude Code 用の設計メモ。このフォルダで Claude Code を開いて指示すれば、設計を理解した上で改修してくれる</td></tr>
+      <tr><th>app/</th><td>アプリ本体のリポジトリ（公開 <span class="mono">papershelf</span>）。push すると約1分で本番に反映</td></tr>
+      <tr><th>data/</th><td>データリポジトリ（非公開 <span class="mono">papershelf-data</span>）の初期clone。実データはGitHub側が最新</td></tr>
+    </table>
+  </section>
+
+  <footer class="end">
+    <span>Papershelf 説明書 — 2026.07 作成</span>
+    <a href="./">アプリを開く →</a>
+  </footer>
+
+</div>
+</body>
+</html>
